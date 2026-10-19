@@ -1,0 +1,10 @@
+node_modules/
+.clasp.json
+.clasprc.json
+.env
+*.log
+.DS_Store
+coverage/
+
+# Generated GitHub Release assets
+release-output/

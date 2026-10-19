@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="راهنمای یک‌صفحه‌ای نصب و استفاده از Persian Calendar برای Google Sheets">
+  <title>راهنمای نصب و استفاده | Persian Calendar</title>
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet">
+  <style>
+    :root{--page:#fff;--text:#151515;--sub:#626262;--hair:#e8e8e8;--subtle:#f6f6f6;--subtle2:#fafafa;--focus:#111}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--page);color:var(--text);font:400 15px/1.95 "Vazir",Tahoma,sans-serif;-webkit-font-smoothing:antialiased}
+    .container{width:min(100% - 48px,816px);margin-inline:auto}
+    header{border-bottom:1px solid var(--hair)}
+    .header-inner{height:69px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+    .brand{font-weight:700;font-size:17px;direction:ltr;letter-spacing:-.5px;line-height:1.5}
+    .version{font-size:12px;font-weight:500;border:1px solid var(--hair);border-radius:999px;padding:3px 12px;color:var(--sub);direction:ltr}
+    main{padding-bottom:54px}
+    .hero{padding:64px 0 40px}
+    .eyebrow{font-size:12px;color:var(--sub);font-weight:600;letter-spacing:.02em}
+    h1{font-size:clamp(29px,5vw,39px);line-height:1.55;letter-spacing:-.8px;margin:9px 0 13px;font-weight:700}
+    .intro{font-size:16px;line-height:2.05;max-width:660px;color:var(--sub);margin:0}
+    .setup-strip{margin-top:29px;background:var(--subtle);border:1px solid #f0f0f0;border-radius:14px;padding:18px 20px}
+    .setup-strip strong{font-size:14px;font-weight:650;display:block;margin-bottom:10px}
+    .filename-list{display:flex;flex-wrap:wrap;gap:8px;direction:ltr;justify-content:flex-end}
+    .file{font:500 12px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;background:#fff;border:1px solid var(--hair);padding:6px 11px;border-radius:9px;white-space:nowrap}
+    section{border-top:1px solid var(--hair);padding:39px 0 36px;scroll-margin-top:30px}
+    .section-label{color:var(--sub);font-size:12px;font-weight:600;line-height:1.5;margin-bottom:6px}
+    h2{font-size:22px;font-weight:700;line-height:1.6;letter-spacing:-.4px;margin:0 0 21px}
+    h3{font-size:15px;line-height:1.8;font-weight:650;margin:0 0 5px}
+    p{margin:0 0 12px}p:last-child{margin-bottom:0}
+    a{color:inherit;text-decoration:underline;text-underline-offset:4px;text-decoration-color:#b4b4b4}
+    a:hover{text-decoration-color:currentColor}
+    a:focus-visible{outline:2px solid var(--focus);outline-offset:4px;border-radius:4px}
+    code{font:500 .91em/1.8 ui-monospace,SFMono-Regular,Consolas,monospace;background:var(--subtle);border:1px solid #f0f0f0;border-radius:5px;padding:1px 5px;direction:ltr;unicode-bidi:isolate;white-space:nowrap}
+    .ltr{direction:ltr;unicode-bidi:isolate;display:inline-block}
+    .steps{list-style:none;margin:0;padding:0;counter-reset:item}
+    .steps li{display:grid;grid-template-columns:34px minmax(0,1fr);gap:14px;padding:16px 0;border-bottom:1px solid var(--hair)}
+    .steps li:first-child{padding-top:3px}.steps li:last-child{border-bottom:0;padding-bottom:0}
+    .steps li:before{counter-increment:item;content:counter(item);width:29px;height:29px;background:var(--subtle);border:1px solid var(--hair);border-radius:10px;display:grid;place-items:center;line-height:1;font:600 13px/1 Tahoma,sans-serif;direction:ltr}
+    .desc{color:var(--sub);font-size:14px;line-height:1.95}
+    .divider-note{background:var(--subtle2);border:1px solid var(--hair);border-radius:12px;padding:14px 17px;margin-top:22px;color:var(--sub);font-size:13px;line-height:2}
+    .divider-note strong{color:var(--text);font-weight:650}
+    .commands{margin:0}
+    .command{display:grid;grid-template-columns:minmax(220px, .89fr) minmax(0,1.11fr);gap:14px;align-items:start;border-bottom:1px solid var(--hair);padding:14px 0}
+    .command:first-child{padding-top:1px}.command:last-child{border-bottom:0;padding-bottom:0}
+    .command dt{font-size:13px;font-weight:600;direction:ltr;text-align:left;unicode-bidi:isolate;line-height:2}
+    .command dd{margin:0;color:var(--sub);font-size:14px;line-height:1.95}
+    .examples{background:var(--subtle);border-radius:14px;overflow:hidden;padding:4px 18px}
+    .example{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:14px 0;border-bottom:1px solid var(--hair)}
+    .example:last-child{border-bottom:0}
+    .example .in,.example .out{font-size:13px;line-height:1.7}
+    .example .in{direction:ltr;text-align:left;unicode-bidi:embed;font-family:ui-monospace,Consolas,monospace;color:#4e4e4e}
+    .example .out{font-weight:600;text-align:right;white-space:nowrap}
+    .small-heading{font-weight:650;font-size:15px;margin:23px 0 10px}
+    .feature-list{margin:0;padding:0 22px 0 0}
+    .feature-list li{margin:7px 0;color:var(--sub);line-height:2}
+    .feature-list li strong{color:var(--text)}
+    .formulas{display:grid;gap:10px}
+    .formula{display:flex;align-items:start;gap:16px;justify-content:space-between;padding:12px 15px;border:1px solid var(--hair);border-radius:10px}
+    .formula code{background:transparent;border:0;padding:0}
+    .formula span{color:var(--sub);font-size:13px;line-height:1.85;text-align:left}
+    .end-note{font-size:13px;color:var(--sub);margin-top:17px}
+    footer{border-top:1px solid var(--hair);color:var(--sub);font-size:12px}
+    .footer-inner{display:flex;justify-content:space-between;gap:16px;align-items:center;padding:20px 0 28px;flex-wrap:wrap}
+    @media(max-width:600px){.container{width:min(100% - 34px,816px)}.hero{padding:42px 0 33px}section{padding:30px 0 29px}h2{font-size:20px}.intro{font-size:14px}.command{display:block}.command dt{text-align:right;margin-bottom:2px}.example{align-items:start;flex-direction:column;gap:6px}.example .out{text-align:right}.formula{display:block}.formula span{display:block;text-align:right;margin-top:4px}.filename-list{justify-content:flex-start}.header-inner{height:60px}}
+    @media print{body{font-size:11pt}.hero{padding-top:25px}section{padding:20px 0}header,footer{border-color:#ccc}.setup-strip,.examples,.divider-note,.steps li:before{background:#f5f5f5!important;print-color-adjust:exact}.steps li,.command,.formula,.example{break-inside:avoid}a{text-decoration:none}.container{width:auto;max-width:816px}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-inner">
+      <span class="brand" lang="en">Persian Calendar</span>
+      <span class="version">v1.0.0</span>
+    </div>
+  </header>
+  <main class="container" id="main">
+    <div class="hero">
+      <div class="eyebrow">راهنمای نصب و استفاده</div>
+      <h1>تقویم جلالی در Google Sheets</h1>
+      <p class="intro">Persian Calendar یک ابزار Google Apps Script برای درج تاریخ شمسی، تبدیل تاریخ‌های میلادی و یکدست‌سازی خودکار ورودی‌ها در ستون‌های انتخاب‌شده است.</p>
+      <div class="setup-strip">
+        <strong>برای نصب، سه فایل داخل پوشه <code>src/</code> را به Apps Script منتقل کنید.</strong>
+        <div class="filename-list"><span class="file">Code.gs</span><span class="file">Calendar.html</span><span class="file">Settings.html</span></div>
+      </div>
+    </div>
+
+    <section id="installation" aria-labelledby="install-title">
+      <div class="section-label">۰۱ / INSTALLATION</div>
+      <h2 id="install-title">نصب در Google Sheets</h2>
+      <ol class="steps">
+        <li><div><h3>فایل مقصد را باز کنید.</h3><p class="desc">در Google Sheets از منوی <span class="ltr">Extensions → Apps Script</span> وارد محیط ویرایش اسکریپت شوید.</p></div></li>
+        <li><div><h3>کد اصلی را منتقل کنید.</h3><p class="desc">محتوای فایل <code>Code.gs</code> بسته را در فایل <code>Code.gs</code> پروژه جایگزین کنید. اگر پروژه از قبل کد دیگری دارد، ابتدا یک نسخه از آن نگه دارید.</p></div></li>
+        <li><div><h3>دو فایل HTML را اضافه کنید.</h3><p class="desc">از گزینه <span class="ltr">+ → HTML</span> دو فایل با نام‌های <code>Calendar</code> و <code>Settings</code> بسازید و محتوای فایل‌های هم‌نام بسته را در آن‌ها قرار دهید. اگر فایل‌ها از قبل وجود دارند، محتوایشان را جایگزین کنید.</p></div></li>
+        <li><div><h3>پروژه را ذخیره کنید.</h3><p class="desc">تغییرات را ذخیره کنید و سپس صفحه Google Sheets را مجدداً بارگذاری کنید.</p></div></li>
+        <li><div><h3>نصب را بررسی کنید.</h3><p class="desc">از منوی <span class="ltr">Persian Calendar → Open Calendar</span> تقویم را باز کنید. ممکن است گوگل هنگام نخستین اجرای بعضی فرمان‌ها از شما بخواهد مجوزها را بررسی و تأیید کنید.</p></div></li>
+      </ol>
+      <div class="divider-note"><strong>به‌روزرسانی:</strong> برای نصب نسخه جدید، محتوای همین سه فایل اجرایی را جایگزین و شیت را دوباره بارگذاری کنید. فایل <code>GUIDE.html</code> فقط راهنماست و نباید به Apps Script اضافه شود.</div>
+    </section>
+
+    <section id="usage" aria-labelledby="usage-title">
+      <div class="section-label">۰۲ / USAGE</div>
+      <h2 id="usage-title">امکانات و فرمان‌ها</h2>
+      <dl class="commands">
+        <div class="command"><dt>Open Calendar</dt><dd>تقویم شمسی را باز می‌کند تا تاریخ انتخاب‌شده در سلول فعال ثبت شود.</dd></div>
+        <div class="command"><dt>Insert Today</dt><dd>تاریخ شمسی روز جاری را در سلول فعال درج می‌کند.</dd></div>
+        <div class="command"><dt>Convert Selection</dt><dd>تاریخ‌های معتبر سلول‌ها یا محدوده انتخاب‌شده را بدون پنجره تأیید به شمسی تبدیل می‌کند.</dd></div>
+        <div class="command"><dt>Set as Persian Date Column</dt><dd>ستون انتخاب‌شده را برای تبدیل خودکار تاریخ‌های ورودی جدید ثبت می‌کند. محتوای قدیمی ستون با این فرمان تغییر نمی‌کند.</dd></div>
+        <div class="command"><dt>Settings</dt><dd>قالب نمایش، نوع ارقام، شیوه بررسی تاریخ‌های مبهم و ستون‌های فعال را تنظیم می‌کند.</dd></div>
+      </dl>
+      <h3 class="small-heading">نمونه تبدیل تاریخ</h3>
+      <div class="examples" aria-label="نمونه‌های ورودی و خروجی">
+        <div class="example"><span class="out">۱۴۰۴/۰۳/۰۷</span><span class="in" lang="en">Wednesday,28 May 2025</span></div>
+        <div class="example"><span class="out">۱۴۰۵/۰۷/۲۶</span><span class="in" lang="en">2026/10/18</span></div>
+        <div class="example"><span class="out">بدون تغییر؛ تاریخ مبهم است</span><span class="in" lang="en">03/04/2026</span></div>
+      </div>
+    </section>
+
+    <section id="preferences" aria-labelledby="prefs-title">
+      <div class="section-label">۰۳ / SETTINGS & FORMULAS</div>
+      <h2 id="prefs-title">تنظیمات و محاسبات</h2>
+      <p class="desc">در بخش <strong>Settings</strong> می‌توانید نمایش عددی یا نوشتاری تاریخ، ارقام فارسی یا لاتین، نحوه تفسیر تاریخ‌های مبهم (DMY/MDY) و تبدیل خودکار ستون‌ها را تنظیم کنید.</p>
+      <h3 class="small-heading">توابع قابل استفاده در سلول‌ها</h3>
+      <div class="formulas">
+        <div class="formula"><code>=JALALI_SERIAL(A2)</code><span>شماره ترتیبی روز برای مقایسه یا مرتب‌سازی</span></div>
+        <div class="formula"><code>=JALALI_DIFF(A2,B2)</code><span>محاسبه اختلاف روز بین دو تاریخ</span></div>
+        <div class="formula"><code>=JALALI_ADD(A2,10)</code><span>افزودن ده روز به تاریخ شمسی</span></div>
+      </div>
+      <p class="end-note">جداکننده آرگومان‌های فرمول ممکن است بسته به تنظیمات منطقه‌ای Google Sheets ویرگول یا نقطه‌ویرگول باشد.</p>
+    </section>
+
+    <section id="notes" aria-labelledby="notes-title">
+      <div class="section-label">۰۴ / IMPORTANT NOTES</div>
+      <h2 id="notes-title">نکات مهم</h2>
+      <ul class="feature-list">
+        <li>تاریخ شمسی در سلول‌ها به‌صورت <strong>متن</strong> ذخیره می‌شود، نه Date بومی Google Sheets.</li>
+        <li>محدوده سال‌های جلالی پشتیبانی‌شده <strong>۱۲۰۰ تا ۱۶۰۰</strong> است. تاریخ‌های دارای ساعت به‌طور خودکار تبدیل نمی‌شوند.</li>
+        <li>هر بار تبدیل گروهی حداکثر <strong>۲۵٬۰۰۰ سلول</strong> را بررسی و <strong>۳٬۰۰۰ مقدار</strong> را تبدیل می‌کند؛ سقف تبدیل خودکار در هر ویرایش نیز ۳٬۰۰۰ سلول است.</li>
+        <li>برای جلوگیری از تغییر ناخواسته، فرمول‌ها و سلول‌های دارای اعتبارسنجی یا حفاظت‌های مشخص در تبدیل گروهی کنار گذاشته می‌شوند.</li>
+        <li>برنامه قابلیت Backup اختصاصی ندارد و بازگشت تغییرات با <code>Ctrl + Z</code> تضمین نمی‌شود.</li>
+      </ul>
+      <div class="divider-note"><strong>پیش از تبدیل گسترده:</strong> از مسیر <span class="ltr">File → Make a copy</span> یک نسخه آزمایشی از شیت تهیه کنید. تاریخچه نسخه‌های Google Sheets نیز از مسیر <span class="ltr">File → Version history</span> در دسترس است.</div>
+      <h3 class="small-heading">رفع اشکال سریع</h3>
+      <p class="desc">اگر منوی Persian Calendar نمایش داده نمی‌شود، صفحه شیت را مجدداً بارگذاری کنید. اگر عملیات با خطای مجوز متوقف می‌شود، دسترسی ویرایش فایل و مجوزهای Apps Script را بررسی کنید.</p>
+    </section>
+  </main>
+  <footer><div class="container footer-inner"><span class="ltr" lang="en">Persian Calendar · v1.0.0</span><span class="ltr" lang="en">MIT · Copyright © 2026 aliwithgrain</span></div></footer>
+</body>
+</html>

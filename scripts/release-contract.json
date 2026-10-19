@@ -1,0 +1,19 @@
+{
+  "version": "1.0.0",
+  "executableSource": "dist",
+  "package": "Persian-Calendar-v1.0.0-Install.zip",
+  "entries": [
+    "src/Code.gs",
+    "src/Calendar.html",
+    "src/Settings.html",
+    "GUIDE.html",
+    "LICENSE"
+  ],
+  "sources": {
+    "src/Code.gs": "dist/Code.gs",
+    "src/Calendar.html": "dist/Calendar.html",
+    "src/Settings.html": "dist/Settings.html",
+    "GUIDE.html": "release/GUIDE.html",
+    "LICENSE": "LICENSE"
+  }
+}

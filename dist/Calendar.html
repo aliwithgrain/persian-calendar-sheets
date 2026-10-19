@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="fa" dir="rtl"><head><base target="_top"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+*{box-sizing:border-box}body{font:13px Tahoma,Arial,sans-serif;color:#233042;margin:0;padding:16px;background:#fff}h1{font:bold 19px Arial;margin:0;direction:ltr;text-align:left}.heading{display:flex;align-items:center;justify-content:space-between;margin:0 0 7px;gap:8px}.settings-shortcut{min-height:36px;min-width:36px;flex:0 0 auto;display:grid;place-items:center}.settings-shortcut:focus-visible,.grid button:focus-visible,.nav button:focus-visible,.actions button:focus-visible{outline:2px solid #2563eb;outline-offset:2px}.sub{color:#6b778a;line-height:1.9;font-size:12px}.target{margin:14px 0;padding:12px;background:#f3f5f9;border-radius:10px;display:flex;justify-content:space-between;gap:7px;align-items:center}.target b{direction:ltr;text-align:left;unicode-bidi:plaintext;overflow-wrap:anywhere;font-size:11px}.nav{display:flex;align-items:center;gap:6px;margin:15px 0 12px}button,input,select{font:inherit}button{border:1px solid #dbe1e9;border-radius:8px;background:white;cursor:pointer;padding:9px}button:disabled,select:disabled,input:disabled{opacity:.48;cursor:wait}button:hover:not(:disabled){background:#f2f5fb}select,input{background:white;border:1px solid #dbe1e9;border-radius:8px;padding:8px 4px;min-width:0}select{flex:1}input{width:67px;text-align:center}.week,.grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px;text-align:center}.week{color:#778393;font-size:11px;margin-bottom:8px}.week span{padding:5px 0}.grid button{border:0;padding:0;height:36px;border-radius:8px}.grid .selected{background:#2563eb;color:white;font-weight:bold}.grid .today{box-shadow:inset 0 0 0 2px #2563eb}.grid .fri{color:#c03847}.grid .selected.fri{color:white}.actions{display:flex;gap:8px;margin-top:16px}.actions button{flex:1}.notice{min-height:32px;margin:12px 0 0;font-size:12px;line-height:1.9}.err{color:#b91c1c}.ok{color:#16803c}.help{border-top:1px solid #e5e8ef;margin-top:16px;padding-top:12px}
+</style></head><body>
+<div class="heading"><h1>Persian Calendar</h1><button type="button" id="settings" class="settings-shortcut" title="Settings" aria-label="باز کردن تنظیمات">⚙</button></div><div class="sub">روز موردنظر را انتخاب کنید تا در سلول فعال شیت ثبت شود.</div>
+<div class="target"><span>سلول فعال</span><b id="target">—</b></div>
+<div class="nav"><button id="prev" title="ماه قبل">‹</button><select id="month" aria-label="ماه"></select><input id="year" aria-label="سال" inputmode="numeric" maxlength="4"><button id="next" title="ماه بعد">›</button></div>
+<div class="week"><span>ش</span><span>ی</span><span>د</span><span>س</span><span>چ</span><span>پ</span><span>ج</span></div>
+<div class="grid" id="days" aria-label="روزهای ماه"></div>
+<div class="actions"><button id="today">برو به امروز</button><button id="refresh">به‌روزرسانی سلول</button></div>
+<div id="status" class="notice" aria-live="polite"></div>
+<div class="help sub">این پنل همیشه سلول فعال فعلی را هنگام ثبت بررسی می‌کند. برای تبدیل تاریخ‌های قدیمی، محدوده را انتخاب کنید و از منوی <b dir="ltr">Persian Calendar → Convert Selection</b> استفاده کنید.</div>
+<script>
+'use strict';
+const N=['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
+const $=id=>document.getElementById(id);
+const en=s=>String(s).replace(/[۰-۹]/g,c=>String(c.charCodeAt(0)-1776)).replace(/[٠-٩]/g,c=>String(c.charCodeAt(0)-1632));
+let config={digits:'persian'},month=null,today=null,selected=null,busy=false;
+const num=s=>config.digits==='latin'?String(s):String(s).replace(/[0-9]/g,c=>'۰۱۲۳۴۵۶۷۸۹'[Number(c)]);
+function status(s,type){$('status').className='notice '+(type||'');$('status').textContent=s||'';}
+function setBusy(v){busy=v;['prev','next','month','year','today','refresh','settings'].forEach(x=>$(x).disabled=v);document.querySelectorAll('#days button').forEach(b=>b.disabled=v);}
+function call(fn,args,onSuccess){setBusy(true);status('در حال انجام…');const runner=google.script.run.withSuccessHandler(x=>{setBusy(false);onSuccess(x);}).withFailureHandler(e=>{setBusy(false);status(e.message||String(e),'err');});runner[fn](...args);}
+for(let i=0;i<12;i++){const op=document.createElement('option');op.value=i+1;op.textContent=N[i];$('month').appendChild(op);}
+function render(data){month=data;$('month').value=data.month;$('year').value=num(data.year);const days=$('days');days.replaceChildren();
+ for(let x=0;x<data.firstWeekday;x++)days.appendChild(document.createElement('span'));
+ for(let d=1;d<=data.days;d++){const b=document.createElement('button');b.type='button';b.textContent=num(d);b.dataset.day=String(d);b.setAttribute('aria-label',num(d)+' '+N[data.month-1]+' '+num(data.year));const wd=(data.firstWeekday+d-1)%7;
+  if(wd===6)b.classList.add('fri');if(today&&today.y===data.year&&today.m===data.month&&today.d===d)b.classList.add('today');
+  if(selected&&selected.y===data.year&&selected.m===data.month&&selected.d===d)b.classList.add('selected');b.onclick=()=>pick(d);days.appendChild(b);}
+}
+function load(y,m){if(busy)return;call('pcGetMonth',[y,m],x=>{render(x);status('');});}
+function pick(d){if(busy||!month)return;const y=month.year,m=month.month;call('pcWriteDate',[y,m,d],x=>{selected={y:y,m:m,d:d};$('target').textContent=x.target;render(month);status('ثبت شد: '+x.value,'ok');});}
+function move(k){if(!month)return;let n=month.year*12+month.month-1+k;load(Math.floor(n/12),(n%12+12)%12+1);}
+$('prev').onclick=()=>move(-1);$('next').onclick=()=>move(1);$('month').onchange=()=>load(month.year,Number($('month').value));
+function changeYear(){const y=Number(en($('year').value));if(!Number.isInteger(y)||y<1200||y>1600){status('سال باید بین ۱۲۰۰ و ۱۶۰۰ باشد.','err');return;}load(y,Number($('month').value));}
+$('year').onchange=changeYear;$('year').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();changeYear();}};
+$('today').onclick=()=>{if(today)load(today.y,today.m);};
+$('refresh').onclick=refresh;
+// RTL calendar keyboard: Left advances one day, Right goes back one day.
+$('days').addEventListener('keydown',event=>{
+ const active=event.target.closest('button[data-day]');
+ if(!active)return;
+ const delta={ArrowLeft:1,ArrowRight:-1,ArrowDown:7,ArrowUp:-7}[event.key];
+ if(!delta)return;
+ const next=Number(active.dataset.day)+delta;
+ if(next>=1 && next<=month.days){
+   const target=$('days').querySelector('button[data-day="'+next+'"]');
+   if(target){event.preventDefault();target.focus();}
+ }
+});
+$('settings').onclick=()=>{if(!busy)call('pcShowSettings',[],()=>{});};
+function refresh(){if(busy)return;call('pcGetCalendarState',[],x=>{config=x.settings;selected=x.selected;today=x.today;$('target').textContent=x.target;render(x);status('');});}
+refresh();
+</script></body></html>
