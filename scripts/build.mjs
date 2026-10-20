@@ -8,5 +8,6 @@ const ordered=['CalendarCore.gs','DateParser.gs','SettingsService.gs','ColumnReg
   'ConversionService.gs','EditTrigger.gs','Code.gs'];
 const code=ordered.map(f=>'// ===== '+f+' =====\n'+fs.readFileSync(path.join(source,f),'utf8')).join('\n\n');
 fs.writeFileSync(path.join(dist,'Code.gs'),code);
-for(const f of ['Calendar.html','Settings.html','appsscript.json']) fs.copyFileSync(path.join(source,f),path.join(dist,f));
+fs.rmSync(path.join(dist,'Calendar.html'),{force:true});
+for(const f of ['Settings.html','appsscript.json']) fs.copyFileSync(path.join(source,f),path.join(dist,f));
 console.log(`Built dist/Code.gs (${code.split('\n').length} lines) and UI/manifest files.`);

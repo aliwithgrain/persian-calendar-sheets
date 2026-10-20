@@ -13,10 +13,10 @@ test('UX-01: single-package guide is Persian RTL, single page, without sidebar o
   assert.match(source,/<section id="usage"/);
 });
 test('UX-01: Vazir web font has a readable local fallback for offline viewing',()=>{
-  assert.match(source,/font-face\.css/);
-  assert.match(source,/"Vazir",Tahoma,sans-serif/);
+  assert.match(source,/family=Vazirmatn/);
+  assert.match(source,/"Vazirmatn",Tahoma,sans-serif/);
   assert.match(source,/Code\.gs/);
-  assert.match(source,/Calendar\.html/);
+  assert.doesNotMatch(source,/Calendar\.html/);
   assert.match(source,/Settings\.html/);
   assert.match(source,/LICENSE|MIT/);
 });

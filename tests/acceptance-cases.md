@@ -2,8 +2,10 @@
 
 > This is a manual checklist. The local unit tests cannot replace live Apps Script testing.
 
-- [ ] Install `dist/` into a fresh spreadsheet; first-run authorization and all five menus work.
+- [ ] Install `dist/` into a fresh spreadsheet; first-run authorization and all four approved menu commands work.
+- [ ] Settings is the only sidebar; there is no Open Calendar menu or installed Calendar HTML.
 - [ ] Test migrating registered-column settings from an existing private installation, when applicable.
+- [ ] Register a column and save Settings without the Google Sheets Developer Metadata range exception.
 - [ ] Paste `Wednesday,28 May 2025`, `monday,16 december 2024` and `2026/10/18` into selected range; Convert succeeds.
 - [ ] Select complete row; other text, numbers, formulas, checkboxes remain unchanged.
 - [ ] Select complete column; upper limit is enforced without data corruption.

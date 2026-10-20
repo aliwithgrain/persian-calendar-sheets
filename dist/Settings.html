@@ -1,23 +1,31 @@
 <!doctype html>
 <html lang="fa" dir="rtl"><head><base target="_top"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap">
 <style>
 *{box-sizing:border-box}body{font:13px Tahoma,Arial,sans-serif;padding:18px;margin:0;color:#1f2937}h1{font:bold 18px Arial;margin:0 0 8px;text-align:left;direction:ltr}h2{font-size:14px;margin:22px 0 12px}.muted{font-size:11px;color:#667085;line-height:1.9}label{display:block;margin:13px 0 5px}select{width:100%;padding:9px;border:1px solid #d4dae2;border-radius:8px;background:white}button{border:1px solid #d4dae2;border-radius:8px;padding:9px 12px;background:white;cursor:pointer;font:inherit}button:disabled{opacity:.5;cursor:wait}button:focus-visible,select:focus-visible{outline:2px solid #2563eb;outline-offset:2px}.primary{background:#2563eb;border-color:#2563eb;color:#fff}.box{background:#f4f6f9;border-radius:10px;padding:12px;margin-top:12px}.row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:8px 0}.row button{padding:5px 9px}.status{margin-top:14px;line-height:1.8;min-height:20px}.err{color:#b91c1c}.ok{color:green}.footer{margin:20px 0;color:#697586;font-size:11px;line-height:1.9}.row button{flex-shrink:0}a{color:#1d4ed8}
-</style></head><body>
-<h1>Persian Calendar · Settings</h1><div class="muted">تنظیمات برای همهٔ ویرایشگران همین فایل مشترک است.</div>
-<label for="format">قالب نمایش تاریخ</label><select id="format"><option value="numeric">۱۴۰۵/۰۷/۲۶</option><option value="long">۲۶ مهر ۱۴۰۵</option></select>
+:root{font-family:"Vazirmatn",Tahoma,Arial,sans-serif;--pc-text:#233042;--pc-muted:#667085;--pc-border:#d8dee8;--pc-soft:#f4f6f9;--pc-primary:#2563eb;--pc-error:#b91c1c;--pc-success:#16803c;--pc-radius:10px;--pc-gap:12px}html{font-family:"Vazirmatn",Tahoma,Arial,sans-serif}button,input,select{font-family:inherit;font-size:inherit}button,select,input{min-height:36px;line-height:1.45}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--pc-primary);outline-offset:2px}body{font-family:"Vazirmatn",Tahoma,Arial,sans-serif;line-height:1.7}
+body{background:var(--pc-soft);margin:0;padding:12px;min-width:0;overflow-x:hidden}.pc-panel{background:#fff;border:1px solid var(--pc-border);border-radius:14px;padding:14px 13px 18px;min-width:0;max-width:100%;margin:0 0 14px;overflow:visible} .pc-panel :where(p,h1,h2){overflow-wrap:anywhere}
+ .settings-nav{display:flex;align-items:center;gap:8px;justify-content:space-between}.pc-panel [hidden]{display:none !important}
+.save-area{margin:14px 0 0}.save-area .status{margin-top:6px;min-height:0}.status:empty{display:none}
+.settings-group{border:0;padding:0;margin:12px 0 0}.settings-group h2{margin:8px 0 9px;font-size:13px;font-weight:700;color:var(--pc-text)}.settings-group label{margin:10px 0 4px}.settings-group select{min-height:38px}.settings-nav .sub{font-size:13px;font-weight:600}.footer{margin-bottom:0}
+</style></head><body><main class="pc-panel">
+<div class="settings-nav"><span class="sub">تنظیمات این فایل</span></div><div class="muted">تنظیمات برای همهٔ ویرایشگران همین فایل مشترک است.</div><div id="dirty-status" class="muted" role="status" aria-live="polite"></div>
+<section class="settings-group" aria-labelledby="display-heading"><h2 id="display-heading">نمایش تاریخ</h2><label for="format">قالب نمایش تاریخ</label><select id="format"><option value="numeric">۱۴۰۵/۰۷/۲۶</option><option value="long">۲۶ مهر ۱۴۰۵</option></select>
 <label for="digits">نوع ارقام</label><select id="digits"><option value="persian">فارسی (پیش‌فرض)</option><option value="latin">English digits</option></select>
-<label for="ambiguous">تاریخ‌های عددی مبهم</label><select id="ambiguous"><option value="skip">تبدیل نشوند (ایمن)</option><option value="dmy">روز / ماه / سال (DD/MM/YYYY)</option><option value="mdy">ماه / روز / سال (MM/DD/YYYY)</option></select>
-<label for="automatic">تبدیل خودکار در ستون‌های آماده‌شده</label><select id="automatic"><option value="true">روشن</option><option value="false">خاموش</option></select>
-<p><button id="save" class="primary">ذخیره تنظیمات</button></p>
+</section><section class="settings-group" aria-labelledby="conversion-heading"><h2 id="conversion-heading">رفتار تبدیل</h2><label for="ambiguous">تاریخ‌های عددی مبهم</label><select id="ambiguous"><option value="skip">تبدیل نشوند (ایمن)</option><option value="dmy">روز / ماه / سال (DD/MM/YYYY)</option><option value="mdy">ماه / روز / سال (MM/DD/YYYY)</option></select>
+<label for="automatic">تبدیل خودکار در ستون‌های آماده‌شده</label><select id="automatic"><option value="true">روشن</option><option value="false">خاموش</option></select><div id="auto-hint" class="muted" role="note"></div></section>
+<div class="save-area"><button id="save" class="primary">ذخیره تنظیمات</button><div class="status" id="status" role="status" aria-live="polite" aria-atomic="true"></div></div>
 <h2>ستون‌های آماده‌شده</h2><div class="muted" id="tab"></div><div id="columns" class="box" aria-live="polite">—</div>
-<div class="status" id="status" role="status" aria-live="polite" aria-atomic="true"></div><div class="footer">برای تنظیم ستون‌های جدید از منوی Set as Persian Date Column استفاده کنید. برای بازیابی نسخه قبلی فایل، از File → Version history → See version history استفاده کنید؛ این کار کل فایل را به نسخه پیشین برمی‌گرداند و Undo یک تبدیل مستقل نیست.</div>
+<div class="status" id="column-status" role="status" aria-live="polite" aria-atomic="true"></div><div class="footer">برای افزودن ستون، فرمان <b dir="ltr">Set as Persian Date Column</b> را از منوی Persian Calendar اجرا کنید.</div>
+</main>
 <script>
-'use strict';const $=x=>document.getElementById(x);let busy=false;
-function report(t,err){$('status').className='status '+(err?'err':'ok');$('status').setAttribute('aria-live',err?'assertive':'polite');$('status').textContent=t||'';}
+'use strict';const $=x=>document.getElementById(x);let busy=false;let savedSnapshot=null;
+function report(t,err,area='status'){const el=$(area);el.className='status '+(err?'err':'ok');el.setAttribute('aria-live',err?'assertive':'polite');el.textContent=t||'';}
 function setBusy(isBusy) {
  busy=isBusy;
  document.querySelectorAll('button').forEach(button=>button.disabled=isBusy);
  document.querySelectorAll('select').forEach(select=>select.disabled=isBusy);
+ if(!isBusy)updateDirty();
 }
 function go(method,args,then){
  if(busy)return;
@@ -25,15 +33,24 @@ function go(method,args,then){
  const runner=google.script.run.withSuccessHandler(x=>{
    setBusy(false);then(x);
  }).withFailureHandler(e=>{
-   setBusy(false);report(e.message||String(e),true);
+   setBusy(false);report(e&&e.message?e.message:String(e),true);
  });
  runner[method](...args);
 }
+const settingKeys=['format','digits','ambiguous','automatic'];
+function currentSettings(){return {format:$('format').value,digits:$('digits').value,ambiguous:$('ambiguous').value,automatic:$('automatic').value};}
+function isDirty(){return savedSnapshot!==null && JSON.stringify(currentSettings())!==savedSnapshot;}
+function updateDirty(){
+ const dirty=isDirty();
+ $('save').disabled=busy||!dirty;
+ $('dirty-status').textContent=dirty?'تغییرات ذخیره نشده‌اند.':'';
+}
+for(const key of settingKeys) $(key).addEventListener('change',updateDirty);
 function columnLetter(n){let out='';for(let v=n;v>0;v=Math.floor((v-1)/26))out=String.fromCharCode(65+(v-1)%26)+out;return out;}
-function show(data){const c=data.settings;$('format').value=c.format;$('digits').value=c.digits;$('ambiguous').value=c.ambiguous;$('automatic').value=String(c.autoConvert);$('tab').textContent='تب فعال: '+data.tab;
- const area=$('columns');area.replaceChildren();if(!data.columns.length)area.textContent='ستونی ثبت نشده است.';
+function show(data){const c=data.settings;$('format').value=c.format;$('digits').value=c.digits;$('ambiguous').value=c.ambiguous;$('automatic').value=String(c.autoConvert);$('tab').textContent='تب هنگام آخرین بازخوانی: '+data.tab;$('auto-hint').textContent=(!data.columns.length && c.autoConvert)?'تبدیل خودکار فعال است، اما در این تب ستونی برای آن ثبت نشده است.':'';savedSnapshot=JSON.stringify(currentSettings());updateDirty();
+ const area=$('columns');area.replaceChildren();if(!data.columns.length)area.textContent='در این تب ستونی برای تبدیل خودکار ثبت نشده است.';
  data.columns.forEach(i=>{const r=document.createElement('div');r.className='row';const t=document.createElement('span');t.textContent='ستون '+columnLetter(i)+' ('+i+')';
- const b=document.createElement('button');b.type='button';b.textContent='لغو ثبت';b.setAttribute('aria-label','لغو ثبت ستون '+columnLetter(i));b.onclick=()=>go('pcRemoveColumn',[i],d=>{show(d);report('ثبت ستون '+columnLetter(i)+' لغو شد.');const next=$('columns').querySelector('button')||$('save');next.focus();});r.append(t,b);area.appendChild(r);});
+ const b=document.createElement('button');b.type='button';b.textContent='لغو ثبت';b.setAttribute('aria-label','لغو ثبت ستون '+columnLetter(i));b.onclick=()=>go('pcRemoveColumn',[i],d=>{const draft=isDirty()?currentSettings():null;show(d);if(draft){for(const key of settingKeys)$(key).value=draft[key];updateDirty();}report('ثبت ستون '+columnLetter(i)+' لغو شد.',false,'column-status');const next=$('columns').querySelector('button')||$('save');next.focus();});r.append(t,b);area.appendChild(r);});
  }
 $('save').onclick=()=>go('pcSaveSettings',[{format:$('format').value,digits:$('digits').value,ambiguous:$('ambiguous').value,autoConvert:$('automatic').value==='true'}],d=>{show(d);report('تنظیمات ذخیره شد.');});
 go('pcGetSettingsState',[],d=>{show(d);report('');});

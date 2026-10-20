@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="راهنمای یک‌صفحه‌ای نصب و استفاده از Persian Calendar برای Google Sheets">
   <title>راهنمای نصب و استفاده | Persian Calendar</title>
-  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root{--page:#fff;--text:#151515;--sub:#626262;--hair:#e8e8e8;--subtle:#f6f6f6;--subtle2:#fafafa;--focus:#111}
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
-    body{margin:0;background:var(--page);color:var(--text);font:400 15px/1.95 "Vazir",Tahoma,sans-serif;-webkit-font-smoothing:antialiased}
+    body{margin:0;background:var(--page);color:var(--text);font:400 15px/1.95 "Vazirmatn",Tahoma,sans-serif;-webkit-font-smoothing:antialiased}
     .container{width:min(100% - 48px,816px);margin-inline:auto}
     header{border-bottom:1px solid var(--hair)}
     .header-inner{height:69px;display:flex;justify-content:space-between;align-items:center;gap:12px}
@@ -72,17 +72,17 @@
   <header>
     <div class="container header-inner">
       <span class="brand" lang="en">Persian Calendar</span>
-      <span class="version">v1.0.0</span>
+      <span class="version">v1.1.0</span>
     </div>
   </header>
   <main class="container" id="main">
     <div class="hero">
       <div class="eyebrow">راهنمای نصب و استفاده</div>
-      <h1>تقویم جلالی در Google Sheets</h1>
+      <h1>تبدیل تاریخ جلالی در Google Sheets</h1>
       <p class="intro">Persian Calendar یک ابزار Google Apps Script برای درج تاریخ شمسی، تبدیل تاریخ‌های میلادی و یکدست‌سازی خودکار ورودی‌ها در ستون‌های انتخاب‌شده است.</p>
       <div class="setup-strip">
-        <strong>برای نصب، سه فایل داخل پوشه <code>src/</code> را به Apps Script منتقل کنید.</strong>
-        <div class="filename-list"><span class="file">Code.gs</span><span class="file">Calendar.html</span><span class="file">Settings.html</span></div>
+        <strong>برای نصب، دو فایل داخل پوشه <code>src/</code> را به Apps Script منتقل کنید.</strong>
+        <div class="filename-list"><span class="file">Code.gs</span><span class="file">Settings.html</span></div>
       </div>
     </div>
 
@@ -92,22 +92,21 @@
       <ol class="steps">
         <li><div><h3>فایل مقصد را باز کنید.</h3><p class="desc">در Google Sheets از منوی <span class="ltr">Extensions → Apps Script</span> وارد محیط ویرایش اسکریپت شوید.</p></div></li>
         <li><div><h3>کد اصلی را منتقل کنید.</h3><p class="desc">محتوای فایل <code>Code.gs</code> بسته را در فایل <code>Code.gs</code> پروژه جایگزین کنید. اگر پروژه از قبل کد دیگری دارد، ابتدا یک نسخه از آن نگه دارید.</p></div></li>
-        <li><div><h3>دو فایل HTML را اضافه کنید.</h3><p class="desc">از گزینه <span class="ltr">+ → HTML</span> دو فایل با نام‌های <code>Calendar</code> و <code>Settings</code> بسازید و محتوای فایل‌های هم‌نام بسته را در آن‌ها قرار دهید. اگر فایل‌ها از قبل وجود دارند، محتوایشان را جایگزین کنید.</p></div></li>
+        <li><div><h3>فایل تنظیمات را اضافه کنید.</h3><p class="desc">از گزینه <span class="ltr">+ → HTML</span> یک فایل با نام <code>Settings</code> بسازید و محتوای فایل <code>Settings.html</code> بسته را در آن قرار دهید. اگر قبلاً فایل <code>Calendar</code> نصب کرده‌اید، پس از تهیه نسخه پشتیبان آن را حذف کنید.</p></div></li>
         <li><div><h3>پروژه را ذخیره کنید.</h3><p class="desc">تغییرات را ذخیره کنید و سپس صفحه Google Sheets را مجدداً بارگذاری کنید.</p></div></li>
-        <li><div><h3>نصب را بررسی کنید.</h3><p class="desc">از منوی <span class="ltr">Persian Calendar → Open Calendar</span> تقویم را باز کنید. ممکن است گوگل هنگام نخستین اجرای بعضی فرمان‌ها از شما بخواهد مجوزها را بررسی و تأیید کنید.</p></div></li>
+        <li><div><h3>نصب را بررسی کنید.</h3><p class="desc">از منوی <span class="ltr">Persian Calendar → Settings</span> پنل تنظیمات را باز کنید؛ سپس روی یک سلول آزمایشی فرمان <span class="ltr">Convert Selection</span> را بررسی کنید. ممکن است گوگل هنگام نخستین اجرای بعضی فرمان‌ها از شما بخواهد مجوزها را بررسی و تأیید کنید.</p></div></li>
       </ol>
-      <div class="divider-note"><strong>به‌روزرسانی:</strong> برای نصب نسخه جدید، محتوای همین سه فایل اجرایی را جایگزین و شیت را دوباره بارگذاری کنید. فایل <code>GUIDE.html</code> فقط راهنماست و نباید به Apps Script اضافه شود.</div>
+      <div class="divider-note"><strong>به‌روزرسانی:</strong> برای نصب نسخه جدید، محتوای همین دو فایل اجرایی را جایگزین و شیت را دوباره بارگذاری کنید. فایل <code>GUIDE.html</code> فقط راهنماست و نباید به Apps Script اضافه شود.</div>
     </section>
 
     <section id="usage" aria-labelledby="usage-title">
       <div class="section-label">۰۲ / USAGE</div>
       <h2 id="usage-title">امکانات و فرمان‌ها</h2>
       <dl class="commands">
-        <div class="command"><dt>Open Calendar</dt><dd>تقویم شمسی را باز می‌کند تا تاریخ انتخاب‌شده در سلول فعال ثبت شود.</dd></div>
         <div class="command"><dt>Insert Today</dt><dd>تاریخ شمسی روز جاری را در سلول فعال درج می‌کند.</dd></div>
-        <div class="command"><dt>Convert Selection</dt><dd>تاریخ‌های معتبر سلول‌ها یا محدوده انتخاب‌شده را بدون پنجره تأیید به شمسی تبدیل می‌کند.</dd></div>
-        <div class="command"><dt>Set as Persian Date Column</dt><dd>ستون انتخاب‌شده را برای تبدیل خودکار تاریخ‌های ورودی جدید ثبت می‌کند. محتوای قدیمی ستون با این فرمان تغییر نمی‌کند.</dd></div>
-        <div class="command"><dt>Settings</dt><dd>قالب نمایش، نوع ارقام، شیوه بررسی تاریخ‌های مبهم و ستون‌های فعال را تنظیم می‌کند.</dd></div>
+        <div class="command"><dt>Convert Selection</dt><dd>تاریخ‌های معتبر سلول، ردیف، ستون یا محدوده انتخاب‌شده را بدون پنجره تأیید به شمسی تبدیل می‌کند.</dd></div>
+        <div class="command"><dt>Set as Persian Date Column</dt><dd>ستون‌های انتخاب‌شده را برای تبدیل خودکار تاریخ‌های ورودی جدید ثبت می‌کند. محتوای قدیمی ستون با این فرمان تغییر نمی‌کند.</dd></div>
+        <div class="command"><dt>Settings</dt><dd>تنها Sidebar برنامه را باز می‌کند و قالب نمایش، نوع ارقام، تاریخ‌های مبهم و ستون‌های ثبت‌شده را تنظیم می‌کند.</dd></div>
       </dl>
       <h3 class="small-heading">نمونه تبدیل تاریخ</h3>
       <div class="examples" aria-label="نمونه‌های ورودی و خروجی">
@@ -145,6 +144,6 @@
       <p class="desc">اگر منوی Persian Calendar نمایش داده نمی‌شود، صفحه شیت را مجدداً بارگذاری کنید. اگر عملیات با خطای مجوز متوقف می‌شود، دسترسی ویرایش فایل و مجوزهای Apps Script را بررسی کنید.</p>
     </section>
   </main>
-  <footer><div class="container footer-inner"><span class="ltr" lang="en">Persian Calendar · v1.0.0</span><span class="ltr" lang="en">MIT · Copyright © 2026 aliwithgrain</span></div></footer>
+  <footer><div class="container footer-inner"><span class="ltr" lang="en">Persian Calendar · v1.1.0</span><span class="ltr" lang="en">MIT · Copyright © 2026 aliwithgrain</span></div></footer>
 </body>
 </html>

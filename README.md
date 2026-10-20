@@ -1,16 +1,16 @@
 # Persian Calendar for Google Sheets
 
-**تقویم و مبدل تاریخ جلالی برای Google Sheets**
+**مبدل تاریخ جلالی برای Google Sheets**
 
-ابزار **Persian Calendar** مبتنی بر **Google Apps Script** است و امکان انتخاب تاریخ از تقویم شمسی، درج تاریخ روز، تبدیل تاریخ‌های میلادی به جلالی و یکدست‌سازی خودکار ورودی‌های تاریخ در ستون‌های تعیین‌شده را فراهم می‌کند. این ابزار در محیط Google Sheets اجرا می‌شود و برای تبدیل تاریخ به سرویس بیرونی وابسته نیست.
+ابزار **Persian Calendar** مبتنی بر **Google Apps Script** است و امکان درج تاریخ روز، تبدیل تاریخ‌های میلادی به جلالی و یکدست‌سازی خودکار ورودی‌های تاریخ در ستون‌های تعیین‌شده را فراهم می‌کند. این ابزار در محیط Google Sheets اجرا می‌شود و برای تبدیل تاریخ به سرویس بیرونی وابسته نیست.
 
 [![Version](https://img.shields.io/github/v/release/aliwithgrain/persian-calendar-sheets?label=Version&style=flat-square&color=0969da&labelColor=555555)](https://github.com/aliwithgrain/persian-calendar-sheets/releases/latest) [![MIT License](https://img.shields.io/badge/License-MIT-e5b567?style=flat-square&labelColor=555555)](LICENSE) ![Google Apps Script](https://img.shields.io/badge/Platform-Google%20Apps%20Script-e98e1d?style=flat-square&labelColor=555555) ![Language: JavaScript](https://img.shields.io/badge/Language-JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=F7DF1E&labelColor=555555) [![Download Latest Release](https://img.shields.io/badge/Download-Latest%20Release-238636?style=flat-square&logo=github&logoColor=white&labelColor=555555)](https://github.com/aliwithgrain/persian-calendar-sheets/releases/latest)
 
 ## دریافت و نصب
 
-فایل `Persian-Calendar-v1.0.0-Install.zip` را از بخش **Assets** در آخرین انتشار دریافت کنید. بسته شامل سه فایل اجرایی در پوشه `src/`، راهنمای فارسی `GUIDE.html` و مجوز `LICENSE` است.
+بسته نصب نسخه **۱.۱.۰** با نام `Persian-Calendar-v1.1.0-Install.zip` شامل دو فایل اجرایی در پوشه `src/`، راهنمای فارسی `GUIDE.html` و مجوز `LICENSE` است. برای دریافت آخرین نسخه عمومی، بخش [Releases](https://github.com/aliwithgrain/persian-calendar-sheets/releases/latest) را بررسی کنید.
 
-فقط محتوای سه فایل داخل `src/` را به پروژه Apps Script مربوط به فایل Google Sheets منتقل کنید. `GUIDE.html` را می‌توانید در مرورگر باز کنید.
+فقط محتوای دو فایل داخل `src/` را به پروژه Apps Script مربوط به فایل Google Sheets منتقل کنید. `GUIDE.html` را می‌توانید در مرورگر باز کنید.
 
 ## امکانات
 
@@ -18,13 +18,12 @@
 
 | عملکرد | فرمان |
 | ---: | ---: |
-| تقویم جلالی را در پنل کناری باز می‌کند و تاریخ انتخاب‌شده را در سلول فعال می‌نویسد | **Open Calendar** |
 | تاریخ جلالی روز جاری را بر اساس منطقه زمانی فایل درج می‌کند | **Insert Today** |
 | تاریخ‌های معتبر را در محدوده انتخاب‌شده به جلالی تبدیل یا از نظر قالب یکدست می‌کند | **Convert Selection** |
 | ستون‌های انتخاب‌شده را برای تبدیل خودکار تاریخ‌های جدید ثبت می‌کند و مقادیر قبلی را تغییر نمی‌دهد | **Set as Persian Date Column** |
 | قالب تاریخ، نوع ارقام، رفتار تاریخ‌های مبهم و مدیریت ستون‌های ثبت‌شده را کنترل می‌کند | **Settings** |
 
-تقویم دارای میان‌بر دسترسی به تنظیمات است. تبدیل گروهی بدون پنجره تأیید اضافی اجرا می‌شود و فقط مقادیر معتبر و قابل‌شناسایی را تغییر می‌دهد.
+برای تبدیل دستی، سلول، ردیف، ستون یا محدوده دلخواه را انتخاب و فرمان `Convert Selection` را اجرا کنید. تنها پنل کناری برنامه `Settings` است و برای تبدیل تاریخ نیازی به بازبودن آن نیست. تبدیل گروهی بدون پنجره تأیید اضافی اجرا می‌شود و فقط مقادیر معتبر و قابل‌شناسایی را تغییر می‌دهد.
 
 ## نمونه‌های تبدیل
 
@@ -84,6 +83,6 @@
 
 ---
 
-**English:** A Jalali date picker and Gregorian-to-Jalali converter for Google Sheets, with customizable formats and automatic conversion in registered columns.
+**English:** A Gregorian-to-Jalali date converter for Google Sheets, with customizable formats, selection-based conversion and automatic conversion in registered columns.
 
 **License:** MIT. Copyright © 2026 aliwithgrain.

@@ -1,6 +1,8 @@
 /** Column-anchored metadata follows structural column shifts better than numeric indexes. */
 const PC_COLUMN_KEY_='PERSIAN_CALENDAR_DATE_COLUMN_V3';
 function pcMetadata_(sheet) {return sheet.createDeveloperMetadataFinder().withKey(PC_COLUMN_KEY_).find();}
+/** Only whole-column A1 ranges are valid developer-metadata locations in Sheets. */
+function pcFullColumnRange_(sheet,index) {const a1=pcColumnA1_(index);return sheet.getRange(a1+':'+a1);}
 function pcRegisteredColumns_(sheet) {
   // Migrate old numeric properties lazily, before reading metadata.
   pcMigrateColumns_(sheet);
@@ -22,7 +24,7 @@ function pcMigrateColumns_(sheet) {
   }
   const indexes=legacy.split(',').map(Number).filter(x=>Number.isInteger(x)&&x>=1&&x<=sheet.getMaxColumns());
   for (const idx of indexes) {
-    if (!existing.has(idx)) sheet.getRange(1,idx,sheet.getMaxRows(),1).addDeveloperMetadata(PC_COLUMN_KEY_,'v3');
+    if (!existing.has(idx)) pcFullColumnRange_(sheet,idx).addDeveloperMetadata(PC_COLUMN_KEY_,'v3');
   }
   props.deleteProperty(key); // prevents obsolete indexes after insertion/deletion
 }
@@ -46,7 +48,7 @@ function pcMarkColumns() {
     const added=[], attempted=[];
     try {
       for(const c of columns) if(!prior.has(c)) {
-        sheet.getRange(1,c,sheet.getMaxRows(),1).addDeveloperMetadata(PC_COLUMN_KEY_,'v3');
+        pcFullColumnRange_(sheet,c).addDeveloperMetadata(PC_COLUMN_KEY_,'v3');
         added.push(c);
       }
       for(const plan of plans) {

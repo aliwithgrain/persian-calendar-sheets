@@ -31,7 +31,7 @@ for(const [name,source] of Object.entries(contract.sources)){
  const ref=fs.readFileSync(path.join(root,source));
  if(hash(ref)!==hash(files.get(name)))throw Error('Release file mismatch: '+name);
 }
-for(const name of ['Code.gs','Calendar.html','Settings.html']){
+for(const name of ['Code.gs','Settings.html']){
  if(!files.has('src/'+name))throw Error('Missing executable: '+name);
 }
 const guide=files.get('GUIDE.html').toString('utf8');

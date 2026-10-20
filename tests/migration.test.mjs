@@ -10,9 +10,11 @@ function setup() {
     cell(r,c){let v=this.cells.get(key(r,c));if(!v){v={value:'',format:'General',formula:'',validation:null};this.cells.set(key(r,c),v);}return v;}
     getRange(...args){
       if(typeof args[0]==='string') {
-        const match=/^([A-Z]+)(\d+)$/.exec(args[0]);
+        const full=/^([A-Z]+):\1$/.exec(args[0]);
+        const match=full || /^([A-Z]+)(\d+)$/.exec(args[0]);
+        if(!match)throw new Error('Invalid test range: '+args[0]);
         let col=0;for(const c of match[1])col=col*26+c.charCodeAt(0)-64;
-        return new Range(this,Number(match[2]),col,1,1);
+        return full?new Range(this,1,col,this.rows,1,true):new Range(this,Number(match[2]),col,1,1);
       }
       return new Range(this,args[0],args[1],args[2]||1,args[3]||1);
     }
@@ -42,7 +44,7 @@ function setup() {
     createDeveloperMetadataFinder(){return {withKey:field=>({find:()=>{this.metadataFinds++;return this.meta.filter(x=>x.getKey()===field);}})};}
   }
   class Range {
-    constructor(sheet,r,c,n,m){this.sheet=sheet;this.r=r;this.c=c;this.n=n;this.m=m;}
+    constructor(sheet,r,c,n,m,wholeColumn=false){this.sheet=sheet;this.r=r;this.c=c;this.n=n;this.m=m;this.wholeColumn=wholeColumn;}
     getSheet(){return this.sheet;}getRow(){return this.r;}getColumn(){return this.c;}
     getLastRow(){return this.r+this.n-1;}getLastColumn(){return this.c+this.m-1;}
     getNumRows(){return this.n;}getNumColumns(){return this.m;}
@@ -63,7 +65,7 @@ function setup() {
     setValue(val){this.sheet.cell(this.r,this.c).value=val;return this;}
     setValues(matrix){this.sheet.writes++;if(this.sheet.failWriteAt===this.sheet.writes) throw new Error('injected write failure');for(let i=0;i<this.n;i++)for(let j=0;j<this.m;j++)this.sheet.cell(this.r+i,this.c+j).value=matrix[i][j];return this;}
     canEdit(){this.sheet.permissionChecks++;for(let i=0;i<this.n;i++)for(let j=0;j<this.m;j++)if(this.sheet.denied.has((this.r+i)+':'+(this.c+j)))return false;return true;}
-    addDeveloperMetadata(k,v){if(this.sheet.failMetadata) throw new Error('injected metadata failure');const sheet=this.sheet,column=this.c;this.sheet.meta.push({getKey:()=>k,getLocation:()=>({getColumn:()=>({getColumn:()=>column})}),remove(){sheet.meta=sheet.meta.filter(x=>x!==this);}});}
+    addDeveloperMetadata(k,v){if(!this.wholeColumn)throw new Error('Adding developer metadata to arbitrary ranges is not currently supported');if(this.sheet.failMetadata) throw new Error('injected metadata failure');const sheet=this.sheet,column=this.c;this.sheet.meta.push({getKey:()=>k,getLocation:()=>({getColumn:()=>({getColumn:()=>column})}),remove(){sheet.meta=sheet.meta.filter(x=>x!==this);}});}
   }
   const spreadsheet={
     getActiveSheet:()=>active,getSheetByName:name=>tabs.find(t=>t.name===name),
@@ -196,7 +198,7 @@ test('PERF-02: protections and unrelated cells remain unaffected',()=>{
 
 test('Automatic onEdit conversion acts only on marked columns for paste, and respects validation',()=>{
  const {ctx,active,spreadsheet}=setup();
- active.getRange(1,1,1000,1).addDeveloperMetadata('PERSIAN_CALENDAR_DATE_COLUMN_V3','v3');
+ active.getRange('A:A').addDeveloperMetadata('PERSIAN_CALENDAR_DATE_COLUMN_V3','v3');
  active.getRange(2,1).setValue('Wednesday,28 May 2025');
  active.getRange(3,1).setValue('2026/10/18');
  active.getRange(2,2).setValue('2026/10/18');
@@ -213,7 +215,7 @@ test('Automatic onEdit conversion acts only on marked columns for paste, and res
 
 test('PERF-03: unrelated edits never fetch settings or cell grids',()=>{
  const {ctx,active,spreadsheet,settingsReadCount}=setup();
- active.getRange(1,1,1000,1).addDeveloperMetadata('PERSIAN_CALENDAR_DATE_COLUMN_V3','v3');
+ active.getRange('A:A').addDeveloperMetadata('PERSIAN_CALENDAR_DATE_COLUMN_V3','v3');
  active.getRange(2,5).setValue('not a date');
  const before=settingsReadCount();
  ctx.onEdit({range:active.getRange(2,5),source:spreadsheet,value:'not a date'});
@@ -227,12 +229,30 @@ test('PERF-03: unrelated edits never fetch settings or cell grids',()=>{
 
 test('PERF-03: wide paste reads only relevant marked column',()=>{
  const {ctx,active,spreadsheet}=setup();
- active.getRange(1,1,1000,1).addDeveloperMetadata('PERSIAN_CALENDAR_DATE_COLUMN_V3','v3');
+ active.getRange('A:A').addDeveloperMetadata('PERSIAN_CALENDAR_DATE_COLUMN_V3','v3');
  active.getRange(2,1).setValue('2026/10/18');
  active.getRange(2,15).setValue('KEEP');
  ctx.onEdit({range:active.getRange(2,1,1,15),source:spreadsheet});
  assert.equal(active.getRange(2,1).getValue(),'۱۴۰۵/۰۷/۲۶');
  assert.equal(active.getRange(2,15).getValue(),'KEEP');
+});
+
+test('QA-13: Google rejects metadata on numeric ranges even when they span a full column',()=>{
+  const {active}=setup();
+  assert.throws(()=>active.getRange(1,1,active.getMaxRows(),1).addDeveloperMetadata('k','v'),/arbitrary ranges/);
+  assert.doesNotThrow(()=>active.getRange('A:A').addDeveloperMetadata('k','v'));
+});
+
+test('QA-13: legacy metadata migration loads Settings and permits saving',()=>{
+  const {ctx,active}=setup();
+  const props=ctx.PropertiesService.getDocumentProperties();
+  props.setProperty('jalali_cols_1','2,3');
+  const state=ctx.pcGetSettingsState();
+  assert.deepEqual(Array.from(state.columns),[2,3]);
+  assert.equal(state.tab,'Data');
+  assert.equal(props.getProperty('jalali_cols_1'),null);
+  assert.deepEqual(Array.from(ctx.pcSaveSettings({format:'long',digits:'persian',ambiguous:'skip',autoConvert:true}).columns),[2,3]);
+  assert.equal(ctx.pcSettings_().format,'long');
 });
 
 test('legacy registered column indexes migrate to developer metadata',()=>{
@@ -337,7 +357,7 @@ test('FIX-04: stale values are rejected before formatting or overwriting',()=>{
 
 test('FIX-04: onEdit skips while the document lock is held, and releases it on success',()=>{
  const {ctx,active,spreadsheet,locks}=setup();
- active.getRange(1,1,1000,1).addDeveloperMetadata('PERSIAN_CALENDAR_DATE_COLUMN_V3','v3');
+ active.getRange('A:A').addDeveloperMetadata('PERSIAN_CALENDAR_DATE_COLUMN_V3','v3');
  active.getRange(2,1).setValue('2026/10/18');
  locks.denied=true;
  ctx.onEdit({range:active.getRange(2,1),source:spreadsheet,value:'2026/10/18'});
@@ -359,7 +379,7 @@ test('FIX-05: oversized paste provides visible fallback guidance',()=>{
 
 test('FIX-05: trigger write failures are visible and do not report success',()=>{
  const {ctx,active,spreadsheet,messages}=setup();
- active.getRange(1,1,1000,1).addDeveloperMetadata('PERSIAN_CALENDAR_DATE_COLUMN_V3','v3');
+ active.getRange('A:A').addDeveloperMetadata('PERSIAN_CALENDAR_DATE_COLUMN_V3','v3');
  active.getRange(2,1).setValue('2026/10/18');
  active.failWriteAt=1;
  ctx.onEdit({range:active.getRange(2,1),source:spreadsheet,value:'2026/10/18'});

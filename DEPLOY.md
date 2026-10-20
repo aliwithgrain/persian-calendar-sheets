@@ -1,6 +1,6 @@
 # راهنمای انتشار و همگام‌سازی Persian Calendar
 
-این سند فرآیند انتشار سورس **Persian Calendar v1.0.0** در GitHub و همگام‌سازی فایل‌های اجرایی با Google Apps Script را برای توسعه‌دهندگان توضیح می‌دهد. برای نصب دستی توسط کاربران، به [INSTALL.md](INSTALL.md) مراجعه کنید.
+این سند فرآیند انتشار سورس **Persian Calendar v1.1.0** در GitHub و همگام‌سازی فایل‌های اجرایی با Google Apps Script را برای توسعه‌دهندگان توضیح می‌دهد. برای نصب دستی توسط کاربران، به [INSTALL.md](INSTALL.md) مراجعه کنید.
 
 ## ۱. تفکیک انتشار سورس و نصب در Google Sheets
 
@@ -17,22 +17,21 @@ GitHub Pages محیط اجرای سرویس `SpreadsheetApp` نیست و برا�
 - برای استفاده از `clasp`، Google Apps Script API باید در صفحه https://script.google.com/home/usersettings فعال شده باشد.
 - شناسه **Script ID** باید از قسمت **Project Settings** در ویرایشگر Apps Script دریافت شود. Script ID با شناسه Spreadsheet متفاوت است.
 
-## ۳. انتشار سورس در GitHub
+## ۳. آماده‌سازی تغییرات در مخزن موجود GitHub
 
-ابتدا یک مخزن خالی در حساب GitHub ایجاد کنید. سپس دستورهای زیر را از ریشه پروژه اجرا کنید:
+مخزن رسمی پروژه از قبل در نشانی [aliwithgrain/persian-calendar-sheets](https://github.com/aliwithgrain/persian-calendar-sheets) وجود دارد؛ بنابراین **مخزن جدید نسازید** و دستورهای `git init` یا تغییر Remote لازم نیست.
+
+پس از تأیید تغییرات در نسخه محلی، وضعیت Git را بررسی کنید و فقط فایل‌های مربوط به پروژه را Stage کنید:
 
 ```bash
-git init
-git add .
-git commit -m "Initial release: Persian Calendar v1.0.0"
-git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
-git push -u origin main
+git status
+git add src dist scripts tests README.md INSTALL.md HELP.md DEPLOY.md release/GUIDE.html package.json
+git diff --cached --stat
 ```
 
-مقادیر `YOUR_USERNAME` و `YOUR_REPOSITORY` باید با مشخصات مخزن واقعی جایگزین شوند. پیش از اجرای `git add .`، بررسی کنید که فایل‌های دارای اطلاعات حساب یا دسترسی در مسیر پروژه قرار نگرفته باشند.
+Commit، Push، Tag و انتشار عمومی نسخه ۱.۱ باید **پس از آزمون واقعی Google Sheets و تأیید صاحب مخزن** انجام شوند. تنها ساخت بسته نصب در محیط محلی به معنی انتشار عمومی نیست.
 
-**این نسخه دارای GitHub Actions نیست.** کنترل کیفیت خودکار در سرویس GitHub اجرا نمی‌شود و باید آزمون‌های پروژه پیش از Commit یا انتشار به‌صورت محلی اجرا شوند.
+**این پروژه در نسخه فعلی GitHub Actions ندارد.** آزمون‌ها باید پیش از هر Commit/Push به‌صورت محلی اجرا شوند.
 
 ## ۴. ساخت و بررسی فایل‌های اجرایی
 
@@ -85,7 +84,7 @@ npm run push
 
 فایل‌های `.clasp.json`، `.clasprc.json` و سایر داده‌های احراز هویت نباید در مخزن عمومی یا خروجی گزارش‌ها منتشر شوند.
 
-## ۶. ساخت بسته نصب و اولین GitHub Release
+## ۶. ساخت بسته نصب و آماده‌سازی انتشار
 
 پس از موفقیت آزمون‌های موجود در [tests/acceptance-cases.md](tests/acceptance-cases.md)، دستور زیر را اجرا کنید:
 
@@ -95,15 +94,15 @@ npm run package
 
 این دستور Build و تست را اجرا می‌کند و **یک بسته نصب** در `release-output/` می‌سازد:
 
-`Persian-Calendar-v1.0.0-Install.zip`
+`Persian-Calendar-v1.1.0-Install.zip`
 
-ساختار ZIP شامل `src/Code.gs`، `src/Calendar.html`، `src/Settings.html`، `GUIDE.html` و `LICENSE` است. پوشه `src/` در این بسته فقط برای نظم‌دادن به **فایل‌های آماده نصب** استفاده می‌شود و با سورس ماژولار `src/` مخزن تفاوت دارد. این فایل‌های اجرایی از `dist/` مخزن تولید می‌شوند.
+ساختار ZIP شامل `src/Code.gs`، `src/Settings.html`، `GUIDE.html` و `LICENSE` است. پوشه `src/` در این بسته فقط برای نظم‌دادن به **فایل‌های آماده نصب** استفاده می‌شود و با سورس ماژولار `src/` مخزن تفاوت دارد. این فایل‌های اجرایی از `dist/` مخزن تولید می‌شوند.
 
 راهنمای فارسی و آفلاین‌خوان `GUIDE.html` از `release/GUIDE.html` گرفته می‌شود. راهنماهای `INSTALL.md` و `HELP.md` برای مطالعه در GitHub نگهداری می‌شوند و داخل ZIP نصب قرار نمی‌گیرند.
 
 بسته خروجی در GitHub Commit نمی‌شود و در بخش **Assets** انتشار قرار می‌گیرد. فایل `scripts/release-contract.json` فهرست مجاز محتوای بسته را تعیین می‌کند.
 
-برای اولین انتشار، تگ `v1.0.0` را روی Commit تأییدشده بسازید و **یک فایل ZIP نصب** را به GitHub Release پیوست کنید. آرشیوهای خودکار Source code که GitHub می‌سازد، جایگزین این فایل نصب نیستند.
+این فایل، بسته نصب رسمی آماده انتشار برای برچسب `v1.1.0` است. Commit، Push، Tag و انتشار آن فقط پس از تأیید صاحب مخزن انجام می‌شوند. آرشیوهای خودکار Source code که GitHub می‌سازد، جایگزین این فایل نصب نیستند.
 
 ## ۷. منابع رسمی
 

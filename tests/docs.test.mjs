@@ -10,7 +10,7 @@ test('DOC-01: README and DEPLOY match the single release asset',()=>{
     assert.ok(readme.includes(name),`README missing ${name}`);
     assert.ok(deploy.includes(name),`DEPLOY missing ${name}`);
   }
-  assert.match(readme,/Latest-Release/);
+  assert.match(readme,/\]\(https:\/\/github\.com\/aliwithgrain\/persian-calendar-sheets\/releases\/latest\)/);
   assert.match(deploy,/npm run package/);
   assert.doesNotMatch(deploy,/Release-Notes\.md/);
 });
@@ -31,4 +31,17 @@ test('DOC-03: Only one install package is described',()=>{
  assert.match(readme,/GUIDE\.html/);
  assert.match(deploy,/یک بسته نصب/);
  assert.doesNotMatch(readme,/Full|Lite|\bFull\.zip|\bLite\.zip/);
+});
+
+test('SO-11: documentation matches the four-command Settings-only experience',()=>{
+ for(const file of ['README.md','INSTALL.md','HELP.md','release/GUIDE.html']){
+  const t=read(file);
+  assert.doesNotMatch(t,/Open Calendar|Calendar\.html|pcShowCalendar/,file);
+  assert.match(t,/Settings/,file);
+  assert.match(t,/Convert Selection/,file);
+ }
+ assert.doesNotMatch(read('README.md'),/<(?:div|style|span)\b/i);
+ const guide=read('release/GUIDE.html');
+ assert.match(guide,/Vazirmatn/);
+ assert.match(read('tests/acceptance-cases.md'),/four approved menu commands/);
 });
